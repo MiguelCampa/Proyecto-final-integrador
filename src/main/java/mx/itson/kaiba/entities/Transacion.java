@@ -4,6 +4,7 @@
  */
 package mx.itson.kaiba.entities;
 
+import com.google.gson.Gson;
 import java.util.List;
 import com.google.gson.annotations.SerializedName;
 
@@ -12,6 +13,20 @@ import com.google.gson.annotations.SerializedName;
  * @author MASTER1
  */
 public class Transacion {
+
+    /**
+     * @return the transactions
+     */
+    public List<UsserData> getTransactions() {
+        return transactions;
+    }
+
+    /**
+     * @param transactions the transactions to set
+     */
+    public void setTransactions(List<UsserData> transactions) {
+        this.transactions = transactions;
+    }
 
     /**
      * @return the product
@@ -69,19 +84,7 @@ public class Transacion {
         this.accountHolder = accountHolder;
     }
 
-    /**
-     * @return the transactions
-     */
-    public List<Transaction> getTransactions() {
-        return transactions;
-    }
 
-    /**
-     * @param transactions the transactions to set
-     */
-    public void setTransactions(List<Transaction> transactions) {
-        this.transactions = transactions;
-    }
     
     private String product;
     @SerializedName ("account-number")
@@ -89,19 +92,19 @@ public class Transacion {
     private String currency;
     @SerializedName ("account-holder")
     private AccountHolder accountHolder;
-    private List<Transaction> transactions;
+    private List<UsserData> transactions;
     
 
-    public static Account deserialize(String json){
-    Account a = new Account();
+    public static AccountHolder deserialize(String json){
+    AccountHolder a = new AccountHolder();
     try{
         Gson gson = new Gson();
-        a = gson.fromJson(json, Account.class);
+        a = gson.fromJson(json, AccountHolder.class);
     } catch (Exception ex){
         System.err.println("Error: " + ex.getMessage());
     } return a;  
     }
-    public static Account interes(double porcentaje){
+    public static AccountHolder interes(double porcentaje){
 
         return null;
     
