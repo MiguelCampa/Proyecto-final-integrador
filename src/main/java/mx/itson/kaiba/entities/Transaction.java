@@ -104,7 +104,7 @@ public class Transaction {
         System.err.println("Error: " + ex.getMessage());
     } return a;  
     }
-    public static Transaction interes(double porcentaje){
+    public static Transaction interests(double porcentaje){
 
         return null;
     

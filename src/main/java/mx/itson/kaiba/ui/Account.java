@@ -55,14 +55,15 @@ public class Account extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        lblProduct.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        lblProduct.setFont(new java.awt.Font("Century Gothic", 0, 36)); // NOI18N
         lblProduct.setForeground(new java.awt.Color(0, 0, 0));
         lblProduct.setText("...");
 
-        lblAccountnumber.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblAccountnumber.setFont(new java.awt.Font("Century Gothic", 0, 18)); // NOI18N
         lblAccountnumber.setForeground(new java.awt.Color(0, 0, 0));
         lblAccountnumber.setText("...");
 
+        lblcurrency.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         lblcurrency.setForeground(new java.awt.Color(0, 0, 0));
         lblcurrency.setText("...");
 
@@ -101,7 +102,7 @@ public class Account extends javax.swing.JFrame {
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 50)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(204, 0, 204));
-        jLabel1.setText("BANK-GALAXY");
+        jLabel1.setText("GALAXYBANK");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -156,54 +157,54 @@ public class Account extends javax.swing.JFrame {
     FileDialog fileDialog = new FileDialog(this, "Select json file", FileDialog.LOAD);
     fileDialog.setVisible(true);
 
-    String ruta = fileDialog.getDirectory();
-    String archivo = fileDialog.getFile();
+    String route = fileDialog.getDirectory();
+    String archive = fileDialog.getFile();
 
-    if (archivo != null) {
-        File archivoSeleccionado = new File(ruta, archivo);
+    if (archive != null) {
+        File archivoSeleccionado = new File(route, archive);
 
-        try (BufferedReader lector = new BufferedReader(new FileReader(archivoSeleccionado))) {
+        try (BufferedReader reader = new BufferedReader(new FileReader(archivoSeleccionado))) {
             StringBuilder contenidoJson = new StringBuilder();
             String linea;
 
             // Leer línea por línea el archivo JSON
-            while ((linea = lector.readLine()) != null) {
+            while ((linea = reader.readLine()) != null) {
                 contenidoJson.append(linea).append("\n");
             }
 
-            String contenido = contenidoJson.toString();
+            String content = contenidoJson.toString();
 
             // Deserializar el contenido JSON a objeto Java
-            Transaction estadoCuenta = Transaction.deserialize(contenido);
-            AccountHolder titular = estadoCuenta.getAccountHolder();
+            Transaction accountStatus = Transaction.deserialize(content);
+            AccountHolder holder = accountStatus.getAccountHolder();
 
             // Mostrar datos generales en etiquetas
-            lblProduct.setText(estadoCuenta.getProduct());
-            lblAccountnumber.setText("Número de cuenta: " + estadoCuenta.getAccountNumber());
-            lblcurrency.setText("Moneda: " + estadoCuenta.getCurrency());
+            lblProduct.setText(accountStatus.getProduct());
+            lblAccountnumber.setText("Número de cuenta: " + accountStatus.getAccountNumber());
+            lblcurrency.setText("Moneda: " + accountStatus.getCurrency());
 
             // Mostrar información del titular de la cuenta
             DefaultTableModel modeloTitular = (DefaultTableModel) tblAccounHolder.getModel();
-            modeloTitular.addRow(new Object[]{ "Código: " + titular.getCode() });
-            modeloTitular.addRow(new Object[]{ "Nombre: " + titular.getName() });
-            modeloTitular.addRow(new Object[]{ "Dirección: " + titular.getAddress() });
-            modeloTitular.addRow(new Object[]{ "Ciudad: " + titular.getCity() });
-            modeloTitular.addRow(new Object[]{ "RFC: " + titular.getTaxpayerId() });
-            modeloTitular.addRow(new Object[]{ "Código postal: " + titular.getZipCode() });
+            modeloTitular.addRow(new Object[]{ "Código: " + holder.getCode() });
+            modeloTitular.addRow(new Object[]{ "Nombre: " + holder.getName() });
+            modeloTitular.addRow(new Object[]{ "Dirección: " + holder.getAddress() });
+            modeloTitular.addRow(new Object[]{ "Ciudad: " + holder.getCity() });
+            modeloTitular.addRow(new Object[]{ "RFC: " + holder.getTaxpayerId() });
+            modeloTitular.addRow(new Object[]{ "Código postal: " + holder.getZipCode() });
 
             // Mostrar lista de transacciones ordenadas por fecha
-            DefaultTableModel modeloTransacciones = (DefaultTableModel) tblTransactions.getModel();
-            modeloTransacciones.setRowCount(0); // Limpiar tabla
+            DefaultTableModel transactionsModel = (DefaultTableModel) tblTransactions.getModel();
+            transactionsModel.setRowCount(0); // Limpiar tabla
 
-            List<UsserData> transactions = new ArrayList<>(estadoCuenta.getTransactions());
+            List<UsserData> transactions = new ArrayList<>(accountStatus.getTransactions());
             transactions.sort( Comparator.comparing(UsserData::getDate) );
 
 
-            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy"); // Formato personalizado
+            SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); // Formato personalizado
 
             for (UsserData transaccion : transactions) {
-                modeloTransacciones.addRow(new Object[]{
-                    formatoFecha.format(transaccion.getDate()),
+                transactionsModel.addRow(new Object[]{
+                    dateFormat.format(transaccion.getDate()),
                     transaccion.getDescription(),
                     transaccion.getReference(),
                     "$" + transaccion.getAmount(),
