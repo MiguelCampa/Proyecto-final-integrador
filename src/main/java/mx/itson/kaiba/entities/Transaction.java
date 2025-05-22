@@ -12,7 +12,7 @@ import com.google.gson.annotations.SerializedName;
  *
  * @author MASTER1
  */
-public class Transacion {
+public class Transaction {
 
     /**
      * @return the transactions
@@ -95,16 +95,16 @@ public class Transacion {
     private List<UsserData> transactions;
     
 
-    public static AccountHolder deserialize(String json){
-    AccountHolder a = new AccountHolder();
+    public static Transaction deserialize(String json){
+    Transaction a = new Transaction();
     try{
         Gson gson = new Gson();
-        a = gson.fromJson(json, AccountHolder.class);
+        a = gson.fromJson(json, Transaction.class);
     } catch (Exception ex){
         System.err.println("Error: " + ex.getMessage());
     } return a;  
     }
-    public static AccountHolder interes(double porcentaje){
+    public static Transaction interes(double porcentaje){
 
         return null;
     

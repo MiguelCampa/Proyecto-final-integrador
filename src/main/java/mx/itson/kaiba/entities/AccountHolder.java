@@ -14,6 +14,20 @@ import com.google.gson.annotations.SerializedName;
 public class AccountHolder {
 
     /**
+     * @return the code
+     */
+    public int getCode() {
+        return code;
+    }
+
+    /**
+     * @param code the code to set
+     */
+    public void setCode(int code) {
+        this.code = code;
+    }
+
+    /**
      * @return the name
      */
     public String getName() {
@@ -83,6 +97,7 @@ public class AccountHolder {
         this.zipCode = zipCode;
     }
     
+    private int code;
     private String name;
     private String address;
     private String city;

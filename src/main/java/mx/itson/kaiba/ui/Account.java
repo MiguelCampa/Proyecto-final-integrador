@@ -4,6 +4,23 @@
  */
 package mx.itson.kaiba.ui;
 
+import java.util.Comparator;
+import java.awt.FileDialog;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+import javax.swing.table.DefaultTableModel;
+import mx.itson.kaiba.entities.AccountHolder;
+import mx.itson.kaiba.entities.Transaction;
+import mx.itson.kaiba.entities.UsserData;
+
+
 /**
  *
  * @author MASTER1
@@ -33,23 +50,32 @@ public class Account extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         tblAccounHolder = new javax.swing.JTable();
         jScrollPane3 = new javax.swing.JScrollPane();
-        jTable2 = new javax.swing.JTable();
+        tblTransactions = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
+        lblProduct.setFont(new java.awt.Font("Segoe UI", 0, 36)); // NOI18N
+        lblProduct.setForeground(new java.awt.Color(0, 0, 0));
         lblProduct.setText("...");
 
+        lblAccountnumber.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        lblAccountnumber.setForeground(new java.awt.Color(0, 0, 0));
         lblAccountnumber.setText("...");
 
+        lblcurrency.setForeground(new java.awt.Color(0, 0, 0));
         lblcurrency.setText("...");
 
         btnSelector.setText("Start transaction");
+        btnSelector.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnSelectorActionPerformed(evt);
+            }
+        });
 
         tblAccounHolder.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null},
-                {null}
+
             },
             new String [] {
                 "Accoun Holder"
@@ -57,7 +83,7 @@ public class Account extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblAccounHolder);
 
-        jTable2.setModel(new javax.swing.table.DefaultTableModel(
+        tblTransactions.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -69,7 +95,7 @@ public class Account extends javax.swing.JFrame {
                 "Date", "Descripcion", "References", "Amount", "Type"
             }
         ));
-        jScrollPane3.setViewportView(jTable2);
+        jScrollPane3.setViewportView(tblTransactions);
 
         jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 60)); // NOI18N
         jLabel1.setForeground(new java.awt.Color(0, 0, 204));
@@ -88,15 +114,16 @@ public class Account extends javax.swing.JFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 743, Short.MAX_VALUE)
-                            .addComponent(jScrollPane3)))
-                    .addGroup(layout.createSequentialGroup()
                         .addComponent(lblcurrency, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(231, 231, 231)
                         .addComponent(btnSelector, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(163, 163, 163)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(34, 34, 34)
+                        .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 743, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -112,16 +139,88 @@ public class Account extends javax.swing.JFrame {
                         .addComponent(lblAccountnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblcurrency, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(56, 56, 56)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 157, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(37, 37, 37)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addContainerGap(119, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void btnSelectorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSelectorActionPerformed
+    // Abrir un diálogo para seleccionar un archivo JSON
+    FileDialog fileDialog = new FileDialog(this, "Select json file", FileDialog.LOAD);
+    fileDialog.setVisible(true);
+
+    String ruta = fileDialog.getDirectory();
+    String archivo = fileDialog.getFile();
+
+    if (archivo != null) {
+        File archivoSeleccionado = new File(ruta, archivo);
+
+        try (BufferedReader lector = new BufferedReader(new FileReader(archivoSeleccionado))) {
+            StringBuilder contenidoJson = new StringBuilder();
+            String linea;
+
+            // Leer línea por línea el archivo JSON
+            while ((linea = lector.readLine()) != null) {
+                contenidoJson.append(linea).append("\n");
+            }
+
+            String contenido = contenidoJson.toString();
+
+            // Deserializar el contenido JSON a objeto Java
+            Transaction estadoCuenta = Transaction.deserialize(contenido);
+            AccountHolder titular = estadoCuenta.getAccountHolder();
+
+            // Mostrar datos generales en etiquetas
+            lblProduct.setText(estadoCuenta.getProduct());
+            lblAccountnumber.setText("Número de cuenta: " + estadoCuenta.getAccountNumber());
+            lblcurrency.setText("Moneda: " + estadoCuenta.getCurrency());
+
+            // Mostrar información del titular de la cuenta
+            DefaultTableModel modeloTitular = (DefaultTableModel) tblAccounHolder.getModel();
+            modeloTitular.addRow(new Object[]{ "Código: " + titular.getCode() });
+            modeloTitular.addRow(new Object[]{ "Nombre: " + titular.getName() });
+            modeloTitular.addRow(new Object[]{ "Dirección: " + titular.getAddress() });
+            modeloTitular.addRow(new Object[]{ "Ciudad: " + titular.getCity() });
+            modeloTitular.addRow(new Object[]{ "RFC: " + titular.getTaxpayerId() });
+            modeloTitular.addRow(new Object[]{ "Código postal: " + titular.getZipCode() });
+
+            // Mostrar lista de transacciones ordenadas por fecha
+            DefaultTableModel modeloTransacciones = (DefaultTableModel) tblTransactions.getModel();
+            modeloTransacciones.setRowCount(0); // Limpiar tabla
+
+            List<UsserData> transacciones = new ArrayList<>(estadoCuenta.getTransactions());
+            transacciones.sort( Comparator.comparing(UsserData::getDate) );
+
+
+            SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy"); // Formato personalizado
+
+            for (UsserData transaccion : transacciones) {
+                modeloTransacciones.addRow(new Object[]{
+                    formatoFecha.format(transaccion.getDate()),
+                    transaccion.getDescription(),
+                    transaccion.getReference(),
+                    "$" + transaccion.getAmount(),
+                    transaccion.getType()
+                });
+            }
+
+        } catch (IOException ex) {
+            ex.printStackTrace(); // Manejo básico de errores
+        }
+    }
+
+
+    }//GEN-LAST:event_btnSelectorActionPerformed
+
+
+
+ 
+    
     /**
      * @param args the command line arguments
      */
@@ -138,22 +237,16 @@ public class Account extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Account.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Account.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Account.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | javax.swing.UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(Account.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
+        
+        //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new Account().setVisible(true);
-            }
+        java.awt.EventQueue.invokeLater(() -> {
+            new Account().setVisible(true);
         });
     }
 
@@ -162,10 +255,10 @@ public class Account extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTable jTable2;
     private javax.swing.JLabel lblAccountnumber;
     private javax.swing.JLabel lblProduct;
     private javax.swing.JLabel lblcurrency;
     private javax.swing.JTable tblAccounHolder;
+    private javax.swing.JTable tblTransactions;
     // End of variables declaration//GEN-END:variables
 }
