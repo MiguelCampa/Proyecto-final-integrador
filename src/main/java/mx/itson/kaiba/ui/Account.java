@@ -83,6 +83,8 @@ public class Account extends javax.swing.JFrame {
         ));
         jScrollPane1.setViewportView(tblAccounHolder);
 
+        tblTransactions.setBackground(new java.awt.Color(102, 0, 102));
+        tblTransactions.setForeground(new java.awt.Color(255, 255, 255));
         tblTransactions.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
@@ -97,9 +99,9 @@ public class Account extends javax.swing.JFrame {
         ));
         jScrollPane3.setViewportView(tblTransactions);
 
-        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 60)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(0, 0, 204));
-        jLabel1.setText("BBVA");
+        jLabel1.setFont(new java.awt.Font("Segoe UI Black", 0, 50)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(204, 0, 204));
+        jLabel1.setText("BANK-GALAXY");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -117,20 +119,20 @@ public class Account extends javax.swing.JFrame {
                         .addComponent(lblcurrency, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(231, 231, 231)
                         .addComponent(btnSelector, javax.swing.GroupLayout.PREFERRED_SIZE, 139, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 179, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel1)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(163, 163, 163)
+                        .addGap(161, 161, 161)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 463, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(34, 34, 34)
+                        .addGap(25, 25, 25)
                         .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 743, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jLabel1)
+                .addGap(35, 35, 35)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(btnSelector, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(layout.createSequentialGroup()
@@ -139,11 +141,11 @@ public class Account extends javax.swing.JFrame {
                         .addComponent(lblAccountnumber, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(lblcurrency, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(37, 37, 37)
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(119, Short.MAX_VALUE))
+                .addContainerGap(18, Short.MAX_VALUE))
         );
 
         pack();
@@ -193,13 +195,13 @@ public class Account extends javax.swing.JFrame {
             DefaultTableModel modeloTransacciones = (DefaultTableModel) tblTransactions.getModel();
             modeloTransacciones.setRowCount(0); // Limpiar tabla
 
-            List<UsserData> transacciones = new ArrayList<>(estadoCuenta.getTransactions());
-            transacciones.sort( Comparator.comparing(UsserData::getDate) );
+            List<UsserData> transactions = new ArrayList<>(estadoCuenta.getTransactions());
+            transactions.sort( Comparator.comparing(UsserData::getDate) );
 
 
             SimpleDateFormat formatoFecha = new SimpleDateFormat("dd/MM/yyyy"); // Formato personalizado
 
-            for (UsserData transaccion : transacciones) {
+            for (UsserData transaccion : transactions) {
                 modeloTransacciones.addRow(new Object[]{
                     formatoFecha.format(transaccion.getDate()),
                     transaccion.getDescription(),
