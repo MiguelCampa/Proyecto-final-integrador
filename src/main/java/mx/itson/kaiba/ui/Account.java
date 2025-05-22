@@ -182,26 +182,37 @@ public class Account extends javax.swing.JFrame {
             lblProduct.setText(accountStatus.getProduct());
             lblAccountnumber.setText("Número de cuenta: " + accountStatus.getAccountNumber());
             lblcurrency.setText("Moneda: " + accountStatus.getCurrency());
+            
+            
+            
 
             // Mostrar información del titular de la cuenta
-            DefaultTableModel modeloTitular = (DefaultTableModel) tblAccounHolder.getModel();
-            modeloTitular.addRow(new Object[]{ "Código: " + holder.getCode() });
-            modeloTitular.addRow(new Object[]{ "Nombre: " + holder.getName() });
-            modeloTitular.addRow(new Object[]{ "Dirección: " + holder.getAddress() });
-            modeloTitular.addRow(new Object[]{ "Ciudad: " + holder.getCity() });
-            modeloTitular.addRow(new Object[]{ "RFC: " + holder.getTaxpayerId() });
-            modeloTitular.addRow(new Object[]{ "Código postal: " + holder.getZipCode() });
+            DefaultTableModel headlineModel = (DefaultTableModel) tblAccounHolder.getModel();
+            headlineModel.addRow(new Object[]{ "Código: " + holder.getCode() });
+            headlineModel.addRow(new Object[]{ "Nombre: " + holder.getName() });
+            headlineModel.addRow(new Object[]{ "Dirección: " + holder.getAddress() });
+            headlineModel.addRow(new Object[]{ "Ciudad: " + holder.getCity() });
+            headlineModel.addRow(new Object[]{ "RFC: " + holder.getTaxpayerId() });
+            headlineModel.addRow(new Object[]{ "Código postal: " + holder.getZipCode() });
 
+            
+            
+            
+            
             // Mostrar lista de transacciones ordenadas por fecha
             DefaultTableModel transactionsModel = (DefaultTableModel) tblTransactions.getModel();
             transactionsModel.setRowCount(0); // Limpiar tabla
 
+            
+            
+            
             List<UsserData> transactions = new ArrayList<>(accountStatus.getTransactions());
             transactions.sort( Comparator.comparing(UsserData::getDate) );
 
 
             SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy"); // Formato personalizado
 
+            
             for (UsserData transaccion : transactions) {
                 transactionsModel.addRow(new Object[]{
                     dateFormat.format(transaccion.getDate()),
